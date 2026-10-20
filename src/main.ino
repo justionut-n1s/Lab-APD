@@ -8,3 +8,4 @@ int raw = analogRead(SENSOR_PIN); // citim valoarea brută a ADC (0..1023)
 Serial.println(raw); // o trimitem spre calculator
 delay(SAMPLE_PERIOD_MS); // așteptăm până la următoarea măsurare
 }
+"// TODO: calibrare senzor" 
