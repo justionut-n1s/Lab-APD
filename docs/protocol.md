@@ -1,6 +1,6 @@
 # Protocol de comunicație PC – Arduino
 
-Acest document descrie protocolul serial dintre PC și Arduino: schimbul de mesaje, comenzile suportate și automatul de stări al achiziției.
+Acest document descrie protocolul serial dintre PC și Arduino: schimbul de mesaje și comenzile suportate.
 
 Parametri legăturii seriale: 115200 baud, 8N1. Comenzile și răspunsurile sunt șiruri ASCII terminate cu `\n`.
 
@@ -26,28 +26,8 @@ sequenceDiagram
 
 ## Comenzi suportate
 
-| Comandă  | Cod    | Efect                                                                 |
-|----------|--------|-----------------------------------------------------------------------|
-| `START`  | `0x01` | Pornește achiziția; Arduino răspunde `ACK` și trimite eșantioane      |
-| `STOP`   | `0x02` | Oprește achiziția; Arduino răspunde `ACK` și revine în `IDLE`         |
-| `STATUS` | `0x03` | Arduino răspunde cu starea curentă: `IDLE`, `SAMPLING` sau `ALARM`    |
-
-## Automatul de achiziție
-
-Achiziția este controlată de un automat cu trei stări. Tranzițiile depind de comenzile primite de la PC și de temperatura măsurată `T` comparată cu pragul `T_prag`.
-
-```mermaid
-stateDiagram-v2
-    [*] --> IDLE
-    IDLE --> SAMPLING : comanda START
-    SAMPLING --> IDLE : comanda STOP
-    SAMPLING --> ALARM : T > T_prag
-    ALARM --> SAMPLING : T <= T_prag
-    ALARM --> IDLE : comanda STOP
-```
-
-| Stare      | Descriere                                                        |
-|------------|------------------------------------------------------------------|
-| `IDLE`     | Repaus: nu se efectuează eșantionare                             |
-| `SAMPLING` | Eșantionare activă, la perioada configurată                      |
-| `ALARM`    | Temperatura a depășit pragul; eșantionarea continuă, cu alarmă   |
+| Comandă  | Cod    | Efect                                                            |
+|----------|--------|------------------------------------------------------------------|
+| `START`  | `0x01` | Pornește achiziția; Arduino răspunde `ACK` și trimite eșantioane |
+| `STOP`   | `0x02` | Oprește achiziția; Arduino răspunde `ACK`                        |
+| `STATUS` | `0x03` | Arduino răspunde cu starea curentă a achiziției                  |
